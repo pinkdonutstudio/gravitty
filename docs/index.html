@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gravitty</title>
+<meta name="description" content="A drop-down terminal for macOS that lives in the notch.">
+<meta name="color-scheme" content="dark">
+<style>
+  :root { --bg:#0b0b0d; --fg:#ececf0; --mute:#8d8d98; --line:#24242b; --claude:#d97757; --kiro:#9046ff; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:17px/1.55 -apple-system, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 0 20px 64px; }
+  /* the notch, with a light running around it like the app does while an agent works */
+  .notch { position:relative; width:200px; height:32px; margin:0 auto 56px; background:#000; border-radius:0 0 14px 14px; }
+  .notch::before { content:""; position:absolute; inset:-2px; border-radius:0 0 16px 16px; padding:2px;
+    background: conic-gradient(from 0deg, transparent 0 55%, var(--claude) 75%, transparent 80% 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity:.8; }
+  @media (prefers-reduced-motion: no-preference) { .notch::before { animation: pulse 2.4s ease-in-out infinite; } }
+  @keyframes pulse { 0%,100% { opacity:.25 } 50% { opacity:1 } }
+  h1 { font-size: clamp(40px, 8vw, 64px); line-height:1.05; letter-spacing:-.03em; margin:0 0 16px; text-wrap:balance; }
+  .lead { font-size:21px; color:var(--mute); margin:0 0 32px; text-wrap:balance; }
+  .cta { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:56px; }
+  a.btn { display:inline-block; padding:11px 20px; border-radius:8px; text-decoration:none; font-weight:600; border:1px solid var(--line); color:var(--fg); }
+  a.primary { background:var(--fg); color:#000; border-color:var(--fg); }
+  a:focus-visible { outline:2px solid var(--claude); outline-offset:3px; }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--mute); margin:0 0 14px; font-weight:600; }
+  ul { list-style:none; padding:0; margin:0 0 48px; display:grid; gap:14px; }
+  li { padding-left:18px; position:relative; }
+  li::before { content:""; position:absolute; left:0; top:.7em; width:7px; height:7px; border-radius:50%; background:var(--claude); }
+  li:nth-child(even)::before { background:var(--kiro); }
+  li b { font-weight:600; }
+  footer { border-top:1px solid var(--line); padding-top:20px; color:var(--mute); font-size:14px; display:flex; flex-wrap:wrap; gap:8px 20px; }
+  footer a { color:var(--mute); }
+  code { font:14px ui-monospace, "SF Mono", Menlo, monospace; background:#16161b; padding:2px 6px; border-radius:4px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="notch" aria-hidden="true"></div>
+  <h1>A terminal that drops out of the notch.</h1>
+  <p class="lead">Press a hotkey and Gravitty grows out of the notch. Press it again and it hides, and your shells keep running.</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/pinkdonutstudio/gravitty/releases/latest">Download for macOS</a>
+    <a class="btn" href="https://github.com/pinkdonutstudio/gravitty">View on GitHub</a>
+  </div>
+
+  <h2>What it does</h2>
+  <ul>
+    <li><b>Long-living sessions.</b> Hiding the panel never closes a shell. Only quitting the app does.</li>
+    <li><b>Notch native.</b> It grows out of the real notch. On a screen without one, it draws a notch so it looks the same.</li>
+    <li><b>Tabs and splits</b> inside the panel, with the keys you expect.</li>
+    <li><b>Agent glance.</b> Hover the notch to see what your Claude Code and Kiro CLI sessions are doing: context, tokens, plan limits, running sub-agents.</li>
+    <li><b>Running light.</b> A light travels around the notch while an agent works: orange for Claude, purple for Kiro. It flashes green and plays a sound when one finishes.</li>
+    <li><b>Local and private.</b> It reads local files only, with no accounts and no telemetry. The one network call is the update check.</li>
+  </ul>
+
+  <h2>Requirements</h2>
+  <ul>
+    <li>macOS 14 or later on Apple silicon. The default hotkey is <code>ctrl</code> + <code>`</code>, and you can change it in Settings.</li>
+  </ul>
+
+  <footer>
+    <span>Free and open source, MIT license.</span>
+    <a href="https://github.com/pinkdonutstudio/gravitty/blob/main/LICENSE">License</a>
+    <a href="https://github.com/pinkdonutstudio/gravitty/releases">All releases</a>
+  </footer>
+</main>
+</body>
+</html>
