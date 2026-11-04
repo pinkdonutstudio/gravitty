@@ -69,10 +69,11 @@ codesign --force --options runtime ${ENT[@]+"${ENT[@]}"} --sign "$SIGN" "$APP"
 codesign --verify --strict --verbose=1 "$APP"
 
 if [ -n "${GRAVITTY_NOTARY_PROFILE:-}" ]; then
-  ditto -c -k --keepParent "$APP" build/Gravitty.zip
-  xcrun notarytool submit build/Gravitty.zip --keychain-profile "$GRAVITTY_NOTARY_PROFILE" --wait
+  ZIP="$(dirname "$APP")/Gravitty.zip"
+  ditto -c -k --keepParent "$APP" "$ZIP"
+  xcrun notarytool submit "$ZIP" --keychain-profile "$GRAVITTY_NOTARY_PROFILE" --wait
   xcrun stapler staple "$APP"
-  ditto -c -k --keepParent "$APP" build/Gravitty.zip # re-zip with the ticket stapled in
+  ditto -c -k --keepParent "$APP" "$ZIP" # re-zip with the ticket stapled in
   spctl --assess --type execute -v "$APP"           # what Gatekeeper will say on another Mac
 fi
 echo "built $APP"
