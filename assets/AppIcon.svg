@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <filter id="filter-1" filterUnits="userSpaceOnUse" x="45" y="45" width="934" height="934" data-vc-blend="multiply" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="13"/><feOffset dx="0" dy="14" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.45"/><feComposite in2="shadow" operator="in" result="paint"/><feMerge><feMergeNode in="paint"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="linear-gradient-1" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#44445f"/>
+      <stop offset="1" stop-color="#17171f"/>
+    </linearGradient>
+    <filter id="filter-2" filterUnits="userSpaceOnUse" x="175" y="63" width="374" height="714" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="8"/></filter>
+    <filter id="filter-3" filterUnits="userSpaceOnUse" x="475" y="63" width="374" height="714" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="8"/></filter>
+  </defs>
+  <title>Untitled-1</title>
+  <g id="Layer_1" data-name="Layer 1">
+    <g filter="url(#filter-1)">
+      <path id="Background" d="M284 100 L740 100 C841.62 100 924 182.38 924 284 L924 740 C924 841.62 841.62 924 740 924 L284 924 C182.38 924 100 841.62 100 740 L100 284 C100 182.38 182.38 100 284 100 Z" fill="url(#linear-gradient-1)"/>
+    </g>
+    <path id="Panel" d="M382 100 L642 100 L642 125 C642 151.667 655.333 165 682 165 L767 165 C797 165 812 180 812 210 L812 680 C812 720 792 740 752 740 L272 740 C232 740 212 720 212 680 L212 210 C212 180 227 165 257 165 L342 165 C368.667 165 382 151.667 382 125 Z" fill="#000000"/>
+    <g filter="url(#filter-2)">
+      <path id="Glow_orange" data-name="Glow orange" d="M382 100 L382 125 C382 151.667 368.667 165 342 165 L257 165 C227 165 212 180 212 210 L212 680 C212 720 232 740 272 740 L512 740" fill="none" stroke="#d97757" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    </g>
+    <g filter="url(#filter-3)">
+      <path id="Glow_purple" data-name="Glow purple" d="M642 100 L642 125 C642 151.667 655.333 165 682 165 L767 165 C797 165 812 180 812 210 L812 680 C812 720 792 740 752 740 L512 740" fill="none" stroke="#9046ff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    </g>
+    <path id="Light_orange" data-name="Light orange" d="M382 100 L382 125 C382 151.667 368.667 165 342 165 L257 165 C227 165 212 180 212 210 L212 680 C212 720 232 740 272 740 L512 740" fill="none" stroke="#e8886a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="Light_purple" data-name="Light purple" d="M642 100 L642 125 C642 151.667 655.333 165 682 165 L767 165 C797 165 812 180 812 210 L812 680 C812 720 792 740 752 740 L512 740" fill="none" stroke="#a66cff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="Prompt_chevron" data-name="Prompt chevron" d="M365 372 L445 452 L365 532" fill="none" stroke="#d97757" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="Cursor" d="M490 512 L616 512 C622.627 512 628 517.373 628 524 L628 538 C628 544.627 622.627 550 616 550 L490 550 C483.373 550 478 544.627 478 538 L478 524 C478 517.373 483.373 512 490 512 Z" fill="#f2f2f6"/>
+  </g>
+</svg>

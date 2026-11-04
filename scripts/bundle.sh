@@ -21,7 +21,8 @@ ATS=""
 APP="${APP_DIR:-build}/Gravitty.app"
 SPARKLE=.build/artifacts/sparkle/Sparkle/Sparkle.xcframework/macos-arm64_x86_64/Sparkle.framework
 rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Frameworks"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Frameworks" "$APP/Contents/Resources"
+cp assets/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 cp "$BIN" "$APP/Contents/MacOS/Gravitty"
 
 # Sparkle (auto-update). The XPC services are only for sandboxed apps, so they are dropped, which also leaves less to sign.
@@ -36,6 +37,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>CFBundleIdentifier</key><string>com.pinkdonutstudio.gravitty</string>
   <key>CFBundleName</key><string>Gravitty</string>
   <key>CFBundleExecutable</key><string>Gravitty</string>
+  <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>$VERSION</string>
   <key>CFBundleVersion</key><string>$BUILD</string>
