@@ -74,6 +74,7 @@ final class HoverView: NSView {
 
     /// One quit path for the menu bar item and ⌘Q: quitting ends every terminal session (D8), so ask if a command is
     /// running. The question is drawn inside the panel (QuitConfirm); this returns .terminateCancel and quits again on "Quit".
+    lazy var updater = Updater()
     let quitConfirm = QuitConfirm()
     var quitConfirmed = false
     func applicationShouldTerminate(_ app: NSApplication) -> NSApplication.TerminateReply {
@@ -237,6 +238,11 @@ final class HoverView: NSView {
         let toggleItem = NSMenuItem(title: "Show / hide terminal (\(settings.hotkey))", action: #selector(toggleFromMenu), keyEquivalent: "")
         toggleItem.target = self
         menu.addItem(toggleItem)
+        if updater.available {
+            let updateItem = NSMenuItem(title: "Check for Updates…", action: #selector(Updater.check), keyEquivalent: "")
+            updateItem.target = updater
+            menu.addItem(updateItem)
+        }
         let setupItem = NSMenuItem(title: "Set up live Claude data…", action: #selector(setupClaudeData), keyEquivalent: "")
         setupItem.target = self
         menu.addItem(setupItem)
@@ -258,7 +264,7 @@ final class HoverView: NSView {
     @objc func setupClaudeData() { Onboarding.offer(force: true) }
     @objc func setupHooks() { Onboarding.offerHooks() }
     lazy var settingsWindow = SettingsWindow { [weak self] in self?.apply($0) }
-    @objc func showSettings() { settingsWindow.show(settings) }
+    @objc func showSettings() { settingsWindow.updater = updater; settingsWindow.show(settings) }
 
     /// Live apply. Hover delay and intro rain are read on use; the fake-notch size needs a restart.
     func apply(_ s: Settings) {

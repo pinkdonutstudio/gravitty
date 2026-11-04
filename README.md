@@ -68,9 +68,13 @@ What it changes: only `statusLine.command` in `~/.claude/settings.json`. A backu
 
 Kiro needs no setup.
 
+## Updates
+
+Gravitty checks GitHub for new releases with [Sparkle](https://sparkle-project.org). It asks once before it starts checking on its own, and you can turn that off in Settings or check by hand from the menu bar icon ("Check for Updates…"). Updates are signed, and the app refuses one that does not match its built-in public key. A build made with `swift build` instead of `scripts/bundle.sh` has no update check.
+
 ## What Gravitty reads
 
-Everything is local and read-only. There are no network calls and no accounts.
+Everything is local and read-only, and there are no accounts. The only network call is the update check (see Updates below); nothing else leaves your Mac, and there is no telemetry.
 
 - `~/.claude/projects/**/*.jsonl`: Claude transcripts and sub-agent logs, for tokens and totals
 - `~/.gravitty/live/*.json`: the copies saved by the wrapper above
@@ -82,7 +86,6 @@ The one thing it writes outside `~/.gravitty` is the Claude setup above, and onl
 
 - Tested on a notched MacBook. The fake notch on a screen without a notch, and two-monitor placement, are built but not yet checked on a Mac mini.
 - Kiro v3 only.
-- No auto-update yet.
 
 ## License
 

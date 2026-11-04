@@ -11,9 +11,12 @@ import AppKit
     private let sound = NSPopUpButton()
     private let msg = NSTextField(labelWithString: "")
     private let onSave: (Settings) -> Void
+    var updater: Updater?
+    private let autoUpdate = NSButton(checkboxWithTitle: "Check for updates automatically", target: nil, action: nil)
 
     init(onSave: @escaping (Settings) -> Void) {
         self.onSave = onSave
+        autoUpdate.target = self; autoUpdate.action = #selector(toggleAutoUpdate)
         window.title = "Gravitty Settings"
         window.isReleasedWhenClosed = false
         func row(_ t: String, _ f: NSView) -> [NSView] { f.widthAnchor.constraint(equalToConstant: 160).isActive = true; return [NSTextField(labelWithString: t), f] }
@@ -25,7 +28,7 @@ import AppKit
         msg.textColor = .systemRed
         let grid = NSGridView(views: [
             row("Hotkey", hotkey), row("Hover delay (s)", hover), row("Panel width", width), row("Panel height", height),
-            row("Fake notch width*", fakeW), row("Fake notch height*", fakeH), [NSView(), rain], [NSView(), soundOn], row("Sound", sound),
+            row("Fake notch width*", fakeW), row("Fake notch height*", fakeH), [NSView(), rain], [NSView(), soundOn], [NSView(), autoUpdate], row("Sound", sound),
             [NSView(), save], [NSView(), msg],
         ])
         grid.column(at: 0).xPlacement = .trailing
@@ -52,11 +55,16 @@ import AppKit
         rain.state = s.introRain ? .on : .off
         soundOn.state = s.finishSound ? .on : .off
         sound.selectItem(withTitle: s.soundName)
+        autoUpdate.isHidden = updater?.available != true
+        autoUpdate.state = updater?.automatic == true ? .on : .off
         msg.stringValue = ""
         window.center()
         NSApp.activate(ignoringOtherApps: true)
         window.makeKeyAndOrderFront(nil)
     }
+
+    // Sparkle stores this itself and applies it at once, so it does not wait for Save.
+    @objc private func toggleAutoUpdate() { updater?.automatic = autoUpdate.state == .on }
 
     @objc private func previewSound() { NSSound(named: sound.titleOfSelectedItem ?? "")?.play() }
 
