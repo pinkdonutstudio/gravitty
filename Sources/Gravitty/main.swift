@@ -77,6 +77,7 @@ final class HoverView: NSView {
     lazy var updater = Updater()
     let quitConfirm = QuitConfirm()
     var quitConfirmed = false
+    func applicationWillTerminate(_ n: Notification) { ws.saveCwd() }
     func applicationShouldTerminate(_ app: NSApplication) -> NSApplication.TerminateReply {
         let cmds = ws.runningCommands()
         guard !quitConfirmed, !cmds.isEmpty else { return .terminateNow }
@@ -472,6 +473,7 @@ final class HoverView: NSView {
     func hide() {
         guard visible else { return }
         visible = false
+        ws.saveCwd() // also here, in case the app is later killed without a clean terminate (power loss)
         quitConfirm.isHidden = true
         bandTimer?.invalidate()
         animateMask(mask, to: notchShape, duration: 0.15) { [weak self] in

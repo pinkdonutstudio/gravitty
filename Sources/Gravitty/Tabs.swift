@@ -11,15 +11,38 @@ final class Workspace: NSObject, LocalProcessTerminalViewDelegate {
     private(set) var current = 0
     var onChange: (() -> Void)?
 
+    /// Where the last session ended, so the next launch reopens there (written on quit, shutdown and panel hide).
+    static let lastCwdURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".gravitty/last-cwd")
+
     override init() {
         super.init()
-        newTab()
+        let saved = (try? String(contentsOf: Workspace.lastCwdURL, encoding: .utf8))?.trimmingCharacters(in: .newlines)
+        newTab(cwd: saved)
     }
 
-    func makePane() -> LocalProcessTerminalView {
+    /// The shell's working directory, read from the kernel, so it works without any shell integration (OSC 7).
+    func cwd(of pane: LocalProcessTerminalView) -> String? {
+        let pid = pane.process.shellPid
+        guard pid > 0 else { return nil }
+        var info = proc_vnodepathinfo()
+        guard proc_pidinfo(pid, PROC_PIDVNODEPATHINFO, 0, &info, Int32(MemoryLayout<proc_vnodepathinfo>.size)) > 0 else { return nil }
+        return withUnsafePointer(to: &info.pvi_cdir.vip_path) { $0.withMemoryRebound(to: CChar.self, capacity: Int(MAXPATHLEN)) { String(cString: $0) } }
+    }
+
+    private var activeCwd: String? { (focused ?? leaves(of: tabs[current].root).first).flatMap(cwd(of:)) }
+
+    func saveCwd() {
+        guard !tabs.isEmpty, let d = activeCwd else { return }
+        try? FileManager.default.createDirectory(at: Workspace.lastCwdURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try? d.write(to: Workspace.lastCwdURL, atomically: true, encoding: .utf8)
+    }
+
+    func makePane(cwd: String? = nil) -> LocalProcessTerminalView {
         let t = LocalProcessTerminalView(frame: container.bounds)
         t.processDelegate = self
-        t.startProcess(executable: ProcessInfo.processInfo.environment["SHELL"] ?? "/bin/zsh", args: ["-l"])
+        var isDir: ObjCBool = false // a saved directory may have been deleted since: fall back to the default (home)
+        let dir = cwd.flatMap { FileManager.default.fileExists(atPath: $0, isDirectory: &isDir) && isDir.boolValue ? $0 : nil }
+        t.startProcess(executable: ProcessInfo.processInfo.environment["SHELL"] ?? "/bin/zsh", args: ["-l"], currentDirectory: dir)
         return t
     }
 
@@ -57,8 +80,9 @@ final class Workspace: NSObject, LocalProcessTerminalViewDelegate {
         onChange?()
     }
 
-    func newTab() {
-        tabs.append(Tab(makePane()))
+    func newTab(cwd: String? = nil) {
+        let dir = cwd ?? (tabs.isEmpty ? nil : activeCwd)
+        tabs.append(Tab(makePane(cwd: dir)))
         show(tabs.count - 1)
         if container.window != nil { Rain.play(over: container) } // no window yet = the first tab built at launch (it rains on first open)
     }
@@ -75,7 +99,7 @@ final class Workspace: NSObject, LocalProcessTerminalViewDelegate {
 
     func split(vertical: Bool) {
         guard let pane = focused else { return }
-        let new = makePane()
+        let new = makePane(cwd: cwd(of: pane))
         let sv = NSSplitView(frame: pane.frame)
         sv.isVertical = vertical // true = side by side
         sv.dividerStyle = .thin
